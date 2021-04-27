@@ -14,7 +14,7 @@ COPY --from=builder \
     /workspace/target/rabbittesttool-1.1-SNAPSHOT-jar-with-dependencies.jar \
     rabbittesttool.jar
 
-COPY benchmark/topologies topologies
-COPY benchmark/policies policies
+COPY topologies topologies
+COPY policies policies
 
 ENTRYPOINT ["java", "-jar", "rabbittesttool.jar"]

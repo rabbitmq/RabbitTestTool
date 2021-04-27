@@ -1,42 +1,17 @@
 SHELL := bash# we want bash behaviour in all shell invocations
 PLATFORM := $(shell uname)
 
-### DEPS ###
-#
-DOCKER_DARWIN := /usr/local/bin/docker
-ifeq ($(PLATFORM),Darwin)
-DOCKER ?= $(DOCKER_DARWIN)
-$(DOCKER):
-	@brew cask install docker
-endif
-DOCKER_LINUX := /usr/bin/docker
-ifeq ($(PLATFORM),Linux)
-DOCKER ?= $(DOCKER_LINUX)
-$(DOCKER): $(CURL)
-	@sudo apt-get update && \
-	sudo apt-get install apt-transport-https gnupg-agent && \
-	$(CURL) -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - && \
-	APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=true apt-key finger | \
-	  grep --quiet "9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88" && \
-	echo "deb https://download.docker.com/linux/ubuntu $$(lsb_release -c -s) stable" | \
-	  sudo tee /etc/apt/sources.list.d/docker.list && \
-	sudo apt-get update && sudo apt-get install docker-ce docker-ce-cli containerd.io && \
-	sudo adduser $$USER docker && newgrp docker && sudo service restart docker
-endif
+VERSION ?= latest
 
-CURL ?= /usr/bin/curl
-ifeq ($(PLATFORM),Linux)
-$(CURL):
-	@sudo apt-get update && sudo apt-get install curl
-endif
+
 
 ### TARGETS ###
 #
 .DEFAULT_GOAL := help
 
 .PHONY: build
-build: $(DOCKER) ## b  | Build JAR
-	@$(DOCKER) run \
+build: ## b  | Build JAR
+	@docker run \
 	  --rm \
 	  --interactive --tty \
 	  --workdir /workspace \
@@ -47,15 +22,19 @@ build: $(DOCKER) ## b  | Build JAR
 .PHONY: b
 b: build
 
-.PHONY: docker-image
-docker-image: $(DOCKER)
+.PHONY: docker-build
+docker-build:
 	@docker build \
-	  --tag vanlightly/rabbittesttool:latest \
-	  .
+	  --tag pivotalrabbitmq/rabbittesttool:$(VERSION) \
+	  benchmark
 
 .PHONY: test-docker-image
-test-docker-image:
-	@docker run -it --rm vanlightly/rabbittesttool:latest help
+test-docker-image: docker-build
+	@docker run -it --rm pivotalrabbitmq/rabbittesttool:$(VERSION) help
+
+.PHONY: docker-push
+docker-push: test-docker-image
+	@docker push pivotalrabbitmq/rabbittesttool:$(VERSION)
 
 .PHONY: help
 help:
