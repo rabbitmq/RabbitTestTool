@@ -1,6 +1,6 @@
-import com.jackvanlightly.rabbittesttool.clients.MessagePayload;
-import com.jackvanlightly.rabbittesttool.model.*;
-import com.jackvanlightly.rabbittesttool.register.NullRegister;
+import com.rabbitmq.rabbittesttool.clients.MessagePayload;
+import com.rabbitmq.rabbittesttool.model.*;
+import com.rabbitmq.rabbittesttool.register.NullRegister;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;

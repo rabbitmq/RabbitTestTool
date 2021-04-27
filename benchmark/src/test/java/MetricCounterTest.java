@@ -1,5 +1,5 @@
-import com.jackvanlightly.rabbittesttool.statistics.MetricCounter;
-import com.jackvanlightly.rabbittesttool.statistics.MetricType;
+import com.rabbitmq.rabbittesttool.statistics.MetricCounter;
+import com.rabbitmq.rabbittesttool.statistics.MetricType;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;

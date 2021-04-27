@@ -1,7 +1,5 @@
-import com.jackvanlightly.rabbittesttool.clients.MessagePayload;
-import com.jackvanlightly.rabbittesttool.model.ReceivedMessage;
-
-import java.time.Instant;
+import com.rabbitmq.rabbittesttool.clients.MessagePayload;
+import com.rabbitmq.rabbittesttool.model.ReceivedMessage;
 
 public class TestMessageUtils {
     public static MessagePayload generateMessagePayload(int stream, long sequenceNumber) {

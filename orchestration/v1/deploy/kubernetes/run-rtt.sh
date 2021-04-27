@@ -29,8 +29,8 @@ echo "Broker IPS: $BROKER_IPS"
 
 
 
-#docker run jackvanlightly/rtt:1.1.1 \
-kubectl run rtt --image=jackvanlightly/rtt:1.1.2 --restart=Never -- --mode benchmark --topology topologies/point-to-point/point-to-point-safe.json --version 3.8.5 --run-tag 12345 --instance standard --volume gp2 --filesystem ? --hosting eks --tenancy ? --core-count 1 --threads-per-core 2 --no-tcp-delay false --config-tag c1 --metrics-influx-uri "$INFLUX_URL" --metrics-influx-user metricsagent --metrics-influx-password $PASSWORD --metrics-influx-database metrics --metrics-influx-interval 10 --broker-hosts "$BROKER_IPS" --broker-mgmt-port 15672 --broker-user "$RMQ_USER" --broker-password "$RMQ_PASSWORD" --postgres-jdbc-url jdbc:postgresql://manny.db.elephantsql.com:5432/ --postgres-user "$POSTGRES_USER" --postgres-pwd "$POSTGRES_PASSWORD" --run-ordinal 1 --override-step-seconds 300
+#docker run rabbitmq/rtt:1.1.1 \
+kubectl run rtt --image=rabbitmq/rtt:1.1.2 --restart=Never -- --mode benchmark --topology topologies/point-to-point/point-to-point-safe.json --version 3.8.5 --run-tag 12345 --instance standard --volume gp2 --filesystem ? --hosting eks --tenancy ? --core-count 1 --threads-per-core 2 --no-tcp-delay false --config-tag c1 --metrics-influx-uri "$INFLUX_URL" --metrics-influx-user metricsagent --metrics-influx-password $PASSWORD --metrics-influx-database metrics --metrics-influx-interval 10 --broker-hosts "$BROKER_IPS" --broker-mgmt-port 15672 --broker-user "$RMQ_USER" --broker-password "$RMQ_PASSWORD" --postgres-jdbc-url jdbc:postgresql://manny.db.elephantsql.com:5432/ --postgres-user "$POSTGRES_USER" --postgres-pwd "$POSTGRES_PASSWORD" --run-ordinal 1 --override-step-seconds 300
 
 $STATUS=$(k get pods rtt | grep rtt | awk '{ print $3}')
 
