@@ -10,8 +10,10 @@ import com.rabbitmq.rabbittesttool.topology.QueueHosts;
 import com.rabbitmq.rabbittesttool.topology.TopologyException;
 import com.rabbitmq.rabbittesttool.topology.model.publishers.StreamPublishMode;
 import com.rabbitmq.stream.Message;
+import com.rabbitmq.stream.StreamException;
 import com.rabbitmq.stream.codec.SimpleCodec;
 import com.rabbitmq.stream.impl.Client;
+import com.rabbitmq.stream.impl.Client.Response;
 import com.rabbitmq.stream.impl.MessageBatch;
 
 import java.io.IOException;
@@ -244,6 +246,11 @@ public class StreamPublisher implements Runnable {
 
                 client = getClient(initSendListener);
                 logger.info("Publisher " + publisherId + " opened connection to " + currentHost.getNodeName() + " for initial publish");
+                Response response = client
+                    .declarePublisher(this.streamPublisherId, null, this.fixedStreamQueue);
+                if (!response.isOk()) {
+                    throw new StreamException("Could not declare publisher", response.getResponseCode());
+                }
 
                 int currentSequence = 0;
                 while (!isCancelled.get()) {
@@ -302,6 +309,11 @@ public class StreamPublisher implements Runnable {
                 listener = new StreamPublisherListener(messageModel, metricGroup, flowController, isBatchListener);
 
                 client = getClient(listener);
+                Response response = client
+                    .declarePublisher(this.streamPublisherId, null, this.fixedStreamQueue);
+                if (!response.isOk()) {
+                    throw new StreamException("Could not declare publisher", response.getResponseCode());
+                }
 
                 String[] streams = new String[streamQueues.size()];
                 for(int i=0; i<streamQueues.size();i++)
@@ -468,7 +480,7 @@ public class StreamPublisher implements Runnable {
             return false;
 
         // send the messages as simple batches
-        List<Long> seqNos = client.publish(fixedStreamQueue, streamPublisherId, messages);
+        List<Long> seqNos = client.publish(streamPublisherId, messages);
         int sent = seqNos.size();
 
         // track the messages
@@ -522,7 +534,7 @@ public class StreamPublisher implements Runnable {
             return false;
 
         // send the sub entries
-        List<Long> batchNos = client.publishBatches(fixedStreamQueue, streamPublisherId, batches);
+        List<Long> batchNos = client.publishBatches(streamPublisherId, batches);
         Map<Long, List<MessagePayload>> batchNosTracking = new HashMap<>();
         for(int i=0; i<batchNos.size(); i++)
             batchNosTracking.put(batchNos.get(i), payloadBatches.get(i));
@@ -548,7 +560,6 @@ public class StreamPublisher implements Runnable {
         byte[] body = getMessage(mp);
 
         long seqNo = client.publish(
-                fixedStreamQueue,
                 streamPublisherId,
                 Collections.singletonList(client.messageBuilder().addData(body).build())
         ).get(0);
