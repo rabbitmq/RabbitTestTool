@@ -28,12 +28,8 @@ docker-build:
 	  --tag pivotalrabbitmq/rabbittesttool:$(VERSION) \
 	  benchmark
 
-.PHONY: test-docker-image
-test-docker-image: docker-build
-	@docker run -it --rm pivotalrabbitmq/rabbittesttool:$(VERSION) help
-
 .PHONY: docker-push
-docker-push: test-docker-image
+docker-push: docker-build
 	@docker push pivotalrabbitmq/rabbittesttool:$(VERSION)
 
 .PHONY: help
