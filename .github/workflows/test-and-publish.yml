@@ -1,7 +1,8 @@
-name: Test & Publish Image
+name: Test & Publish Dev Image
 
 on:
   push:
+    branches: main
 
 jobs:
   test:
@@ -26,6 +27,20 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     steps:
+      - uses: actions/checkout@v2
+      - name: Prepare Tags
+        id: prep
+        run: |
+          set -euxo pipefail
+          DOCKER_IMAGE=pivotalrabbitmq/rabbittesttool
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/v}
+            TAGS="${DOCKER_IMAGE}:${VERSION},${DOCKER_IMAGE}:${GITHUB_SHA},${DOCKER_IMAGE}:latest"
+          else
+            VERSION="${DOCKER_IMAGE}:${GITHUB_SHA},${DOCKER_IMAGE}:dev"
+          fi
+          echo ::set-output name=tags::${TAGS}
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
       - name: Login to DockerHub
@@ -33,14 +48,10 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - uses: actions/checkout@v2
-      - name: Publish Docker Image
-        run: |
-          set -x
-          VERSION=latest
-          if [[ ! $GITHUB_REF =~ "/tags/" ]]
-          then
-            VERSION=dev
-          fi
-          export VERSION
-          make docker-push
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./benchmark/Dockerfile
+          push: true
+          tags: ${{ steps.prep.outputs.tags }}
