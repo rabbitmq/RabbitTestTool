@@ -1,9 +1,6 @@
 SHELL := bash# we want bash behaviour in all shell invocations
-PLATFORM := $(shell uname)
 
 VERSION ?= latest
-
-
 
 ### TARGETS ###
 #
