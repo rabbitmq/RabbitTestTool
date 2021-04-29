@@ -1,4 +1,4 @@
-name: Test & Publish Dev Image
+name: Test & Publish Image
 
 on:
   push:
@@ -37,7 +37,7 @@ jobs:
             VERSION=${GITHUB_REF#refs/tags/v}
             TAGS="${DOCKER_IMAGE}:${VERSION},${DOCKER_IMAGE}:${GITHUB_SHA},${DOCKER_IMAGE}:latest"
           else
-            VERSION="${DOCKER_IMAGE}:${GITHUB_SHA},${DOCKER_IMAGE}:dev"
+            TAGS="${DOCKER_IMAGE}:${GITHUB_SHA},${DOCKER_IMAGE}:dev"
           fi
           echo ::set-output name=tags::${TAGS}
 
