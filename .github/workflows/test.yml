@@ -1,0 +1,25 @@
+name: Test
+
+on:
+  pull_request:
+    branches:
+    - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      - name: Build & Test with Maven
+        run: |
+          pushd benchmark
+            mvn --batch-mode --update-snapshots verify
+          popd
+          pushd orchestration/v2
+            mvn --batch-mode --update-snapshots verify
+          popd
