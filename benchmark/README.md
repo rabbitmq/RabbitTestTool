@@ -634,6 +634,7 @@ Run a benchmark using the "--mode benchmark" argument.
 | config-file | | Optional | File path tp config file. An alternate source for all argument values. The fields in the JSON file must be the same as the command line but without --. For example: {"broker-hosts": "localhost"} |
 | topology | behaviour | Mandatory | The path to the topology file |
 | policies | behaviour | Optional | The path to the policies file |
+| declare  | behaviour | Optional | Boolean indicating whether the topology should be managed by RabbitTestTool. If false, RabbitTestTool will expect the topology to be pre-declared. If true, RabbitTestTool will declare the topology, then clean up upon completion. |
 | broker-hosts | broker | Mandatory | The broker hostnames or IP addresses, comma separated |
 | broker-mgmt-port | broker | Mandatory | The broker management plugin port |
 | broker-port | broker | Mandatory | The broker amqp port |
