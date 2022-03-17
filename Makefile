@@ -14,7 +14,7 @@ build: ## b  | Build JAR
 	  --workdir /workspace \
 	  --volume $(CURDIR)/benchmark:/workspace \
 	  --volume rabbittesttool-maven-cache:/root/.m2 \
-	  maven:3.6-jdk-8 \
+	  maven:3.8-jdk-11 \
 	  mvn clean package
 .PHONY: b
 b: build

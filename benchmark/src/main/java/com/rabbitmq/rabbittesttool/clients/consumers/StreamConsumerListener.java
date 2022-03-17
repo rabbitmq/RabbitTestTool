@@ -31,6 +31,7 @@ public class StreamConsumerListener implements Client.ChunkListener, Client.Mess
     volatile int pendingCreditCounter;
     volatile Instant lastGrantedCreditTime;
     AtomicLong lastOffset;
+    AtomicLong chunkTimestamp;
     long lastRecordedLatency;
     long summedLatency = 0;
     long latencyMeasurements = 0;
@@ -41,6 +42,7 @@ public class StreamConsumerListener implements Client.ChunkListener, Client.Mess
                                   MetricGroup metricGroup,
                                   MessageModel messageModel,
                                   AtomicLong lastOffset,
+                                  AtomicLong chunkTimestamp,
                                   int prefetch,
                                   int ackInterval,
                                   int ackIntervalMs,
@@ -56,6 +58,7 @@ public class StreamConsumerListener implements Client.ChunkListener, Client.Mess
         this.prefetch = prefetch;
         this.processingMs = processingMs;
         this.lastOffset = lastOffset;
+        this.chunkTimestamp = chunkTimestamp;
 
         pendingCreditCounter = 0;
         lastGrantedCreditTime = Instant.now();
@@ -74,9 +77,10 @@ public class StreamConsumerListener implements Client.ChunkListener, Client.Mess
     }
 
     @Override
-    public void handle(byte subscriptionId, long offset, Message message) {
+    public void handle(byte subscriptionId, long offset, long chunkTimestamp, Message message) {
         try {
             this.lastOffset.set(offset);
+            this.chunkTimestamp.set(chunkTimestamp);
             this.handleMessage(message);
 
             if(processingMs > 0)
