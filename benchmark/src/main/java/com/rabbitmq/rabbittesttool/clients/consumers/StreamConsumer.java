@@ -34,6 +34,7 @@ public class StreamConsumer implements Runnable  {
     ConsumerSettings consumerSettings;
     Broker currentHost;
     AtomicLong lastOffset;
+    AtomicLong chunkTimestamp;
 
     public StreamConsumer(String consumerId,
                           ConnectionSettings connectionSettings,
@@ -51,6 +52,7 @@ public class StreamConsumer implements Runnable  {
         this.metricGroup = metricGroup;
         this.step = 0;
         this.lastOffset = new AtomicLong();
+        this.chunkTimestamp = new AtomicLong();
     }
 
     public void signalStop() {
@@ -108,6 +110,7 @@ public class StreamConsumer implements Runnable  {
                             metricGroup,
                             messageModel,
                             lastOffset,
+                            chunkTimestamp,
                             consumerSettings.getAckMode().getConsumerPrefetch(),
                             consumerSettings.getAckMode().getAckInterval(),
                             consumerSettings.getAckMode().getAckIntervalMs(),
@@ -165,6 +168,7 @@ public class StreamConsumer implements Runnable  {
                     metricGroup,
                     messageModel,
                     this.lastOffset,
+                    this.chunkTimestamp,
                     consumerSettings.getAckMode().getConsumerPrefetch(),
                     consumerSettings.getAckMode().getAckInterval(),
                     consumerSettings.getAckMode().getAckIntervalMs(),
