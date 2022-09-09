@@ -77,7 +77,7 @@ public class StreamConsumerListener implements Client.ChunkListener, Client.Mess
     }
 
     @Override
-    public void handle(byte subscriptionId, long offset, long chunkTimestamp, Message message) {
+    public void handle(byte subscriptionId, long offset, long chunkTimestamp, long committedOffset, Message message) {
         try {
             this.lastOffset.set(offset);
             this.chunkTimestamp.set(chunkTimestamp);
