@@ -39,7 +39,7 @@ jobs:
           else
             TAGS="${DOCKER_IMAGE}:${GITHUB_SHA},${DOCKER_IMAGE}:dev"
           fi
-          echo ::set-output name=tags::${TAGS}
+          echo "tags=${TAGS}" >> $GITHUB_OUTPUT
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
