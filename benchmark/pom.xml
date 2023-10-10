@@ -10,7 +10,7 @@
     <packaging>jar</packaging>
 
     <properties>
-        <micrometer.version>1.11.4</micrometer.version>
+        <micrometer.version>1.11.5</micrometer.version>
         <commons-cli.version>1.5.0</commons-cli.version>
         <logback.version>1.4.11</logback.version>
         <maven.jar.plugin.version>3.0.2</maven.jar.plugin.version>
