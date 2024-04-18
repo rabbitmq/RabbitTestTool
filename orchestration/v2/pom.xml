@@ -10,7 +10,7 @@
 
     <properties>
         <commons-cli.version>1.7.0</commons-cli.version>
-        <logback.version>1.5.5</logback.version>
+        <logback.version>1.5.6</logback.version>
         <maven.jar.plugin.version>3.0.2</maven.jar.plugin.version>
         <assertj.version>3.13.2</assertj.version>
     </properties>
