@@ -11,7 +11,7 @@
 
     <properties>
         <micrometer.version>1.13.0</micrometer.version>
-        <commons-cli.version>1.7.0</commons-cli.version>
+        <commons-cli.version>1.8.0</commons-cli.version>
         <logback.version>1.5.6</logback.version>
         <maven.jar.plugin.version>3.0.2</maven.jar.plugin.version>
         <assertj.version>3.25.3</assertj.version>
