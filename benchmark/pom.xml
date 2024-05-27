@@ -14,7 +14,7 @@
         <commons-cli.version>1.8.0</commons-cli.version>
         <logback.version>1.5.6</logback.version>
         <maven.jar.plugin.version>3.0.2</maven.jar.plugin.version>
-        <assertj.version>3.25.3</assertj.version>
+        <assertj.version>3.26.0</assertj.version>
     </properties>
 
     <dependencies>
